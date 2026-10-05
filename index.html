@@ -258,7 +258,13 @@ h2 em { color: var(--accent); font-weight: 300; }
 .tag { font-family: var(--mono); font-size: 11.5px; padding: 4px 10px; border-radius: 999px; background: var(--surface-2); color: var(--ink); white-space: nowrap; }
 .card .arrow { position: absolute; right: 22px; bottom: 22px; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: var(--ink); color: var(--bg); opacity: 0; transform: translate(-6px, 6px); transition: all .3s; }
 .card .arrow svg { width: 14px; height: 14px; }
-.card:hover .arrow, .card:focus-visible .arrow { opacity: 1; transform: none; }
+.card:hover .arrow, .card:focus-within .arrow { opacity: 1; transform: none; }
+.card-open { all: unset; cursor: pointer; }
+.card-open::after { content: ""; position: absolute; inset: 0; border-radius: inherit; z-index: 1; }
+.card-open:focus-visible::after { outline: 2px solid var(--accent); outline-offset: -2px; }
+.card .store { position: relative; z-index: 2; display: flex; flex-wrap: wrap; gap: 8px; }
+.card .store a { text-decoration: none; font-size: 13px; font-weight: 500; padding: 7px 14px; border-radius: 999px; background: var(--ink); color: var(--bg); transition: transform .2s, background .2s; }
+.card .store a:hover { transform: translateY(-1px); background: var(--c); color: #fff; }
 .card.featured { grid-column: span 3; min-height: 320px; background: linear-gradient(160deg, color-mix(in srgb, var(--c) 14%, var(--surface)), var(--surface) 70%); }
 .card.featured h3 { font-size: clamp(1.9rem, 3vw, 2.4rem); }
 .card.featured .ic { width: 68px; font-size: 30px; border-radius: 17px; }
@@ -674,7 +680,9 @@ const PROJECTS = [
   { id: 'akhdar', name: 'Akhdar', glyph: 'A', color: '#2E8B3A', featured: true, badge: 'LIVE',
     tagline: 'Book summaries, fast', cats: ['mobile'],
     desc: 'A book-summary app that helps readers quickly learn the key ideas from popular titles. It has an Arabic-first RTL UI and real-time Firebase sync.',
-    stack: ['Flutter', 'Firebase', 'MVVM', 'RTL'], platforms: 'App Store · Google Play', links: [] },
+    stack: ['Flutter', 'Firebase', 'MVVM', 'RTL'], platforms: 'App Store · Google Play', links: [
+      { label: 'App Store', url: 'https://apps.apple.com/eg/app/id1454030988' },
+      { label: 'Google Play', url: 'https://play.google.com/store/apps/details?id=com.a5dr.app' }] },
   { id: 'tarasul', name: 'TARASUL', glyph: 'T', color: '#14456B', featured: true, badge: 'GOV',
     tagline: 'Ministry of Finance, Kuwait', cats: ['mobile', 'gov'], region: 'State of Kuwait',
     desc: 'A digital correspondence and document management app for internal communication at the Ministry of Finance of the State of Kuwait.',
@@ -682,11 +690,11 @@ const PROJECTS = [
   { id: 'findsapp', name: 'FindsApp', glyph: 'F', color: '#E09A1F',
     tagline: 'Discover new spots', cats: ['mobile'],
     desc: 'A discovery platform that helps users find and explore new favourite places.',
-    stack: ['Flutter', 'Google Maps', 'REST'], platforms: 'App Store · Google Play', links: [] },
+    stack: ['Flutter', 'Google Maps', 'REST'], platforms: 'App Store · Google Play', links: [{ label: 'App Store', url: 'https://apps.apple.com/sa/app/findsapp/id6502782942' }] },
   { id: 'ecip', name: 'ECIP', glyph: 'E', color: '#1F5FAF',
     tagline: 'Motor insurance, Egypt', cats: ['mobile', 'gov'], region: 'Egypt',
     desc: 'An app for checking compulsory vehicle insurance status and using motor insurance services in Egypt.',
-    stack: ['Flutter', 'REST', 'Insurance'], platforms: 'Google Play · Egypt', links: [] },
+    stack: ['Flutter', 'REST', 'Insurance'], platforms: 'Google Play · Egypt', links: [{ label: 'Google Play', url: 'https://play.google.com/store/apps/details?id=com.ecip.ecipmog' }] },
   { id: 'gamerleague', name: 'Gamerleague', glyph: 'G', color: '#7A2BD6',
     tagline: 'Team up & compete', cats: ['web'],
     desc: 'A web platform where users form teams and compete in gaming competitions.',
@@ -743,15 +751,16 @@ filtersEl.innerHTML = FILTERS.map((f, i) => {
 function renderGrid(filter) {
   const list = filter === 'all' ? PROJECTS : PROJECTS.filter(p => p.cats.includes(filter));
   grid.innerHTML = list.map((p, i) => `
-    <button class="card ${p.featured ? 'featured' : ''} reveal" style="--c:${p.color};--d:${(i % 3) * .06}s" data-id="${p.id}" aria-label="${esc(p.name)}: details">
+    <article class="card ${p.featured ? 'featured' : ''} reveal" style="--c:${p.color};--d:${(i % 3) * .06}s">
       ${p.badge ? `<span class="badge">${esc(p.badge)}</span>` : ''}
       <div class="top">${icon(p)}<span class="plat">${esc(p.platforms).replace(' · ', '<br>')}</span></div>
-      <div><h3>${esc(p.name)}</h3></div>
+      <h3><button class="card-open" data-id="${p.id}" aria-label="${esc(p.name)}: details">${esc(p.name)}</button></h3>
       <div class="tagline" style="color:${p.color}">${esc(p.tagline)}</div>
       <p>${esc(p.desc)}</p>
+      ${p.links.some(l => l.url) ? `<div class="store">${p.links.filter(l => l.url).map(l => `<a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)} ↗</a>`).join('')}</div>` : ''}
       <div class="stack">${p.stack.map(s => `<span class="tag">${esc(s)}</span>`).join('')}</div>
       <span class="arrow">${arrowSvg}</span>
-    </button>`).join('');
+    </article>`).join('');
   observeReveals();
 }
 filtersEl.addEventListener('click', e => {
