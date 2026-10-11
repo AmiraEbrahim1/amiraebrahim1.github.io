@@ -346,6 +346,8 @@ dialog[open] { animation: pop .35s cubic-bezier(.2,.9,.3,1.2); }
 .lcard .muted { color: var(--muted); font-size: 14.5px; margin: 0; }
 .lcard ul { margin: 6px 0 0; padding-left: 18px; font-size: 14.5px; display: grid; gap: 8px; }
 .lcard .cert { margin-top: auto; align-self: flex-start; text-decoration: none; font-size: 13px; font-weight: 500; padding: 7px 14px; border-radius: 999px; border: 1px solid var(--line); transition: background .2s, border-color .2s, color .2s; }
+.lcard.big .cert { border-color: color-mix(in srgb, var(--bg) 30%, transparent); color: var(--bg); }
+.lcard.big .cert:hover { background: var(--bg); color: var(--ink); border-color: var(--bg); }
 .lcard .cert:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
 .lcard .grade { margin-top: auto; display: flex; gap: 10px; flex-wrap: wrap; }
 .lcard .grade span { font-family: var(--mono); font-size: 12px; padding: 5px 10px; border-radius: 8px; background: color-mix(in srgb, var(--accent) 14%, transparent); color: var(--accent); }
@@ -602,6 +604,7 @@ footer a { text-decoration: none; } footer a:hover { color: var(--accent); }
             <li>Pull requests, code reviews, root cause analysis and regression testing</li>
             <li>A team capstone covering requirements, documentation, testing and presentation</li>
           </ul>
+          <a class="cert" href="https://drive.google.com/file/d/1p_OYWivf26P3IBMwpYUkzZCbJWvs4GOT/view" target="_blank" rel="noopener">View certificate ↗</a>
         </article>
         <article class="lcard reveal" style="--d:.05s">
           <span class="when">2019 to 2023</span>
@@ -646,6 +649,7 @@ footer a { text-decoration: none; } footer a:hover { color: var(--accent); }
             amiraebrahim720@gmail.com
           </button>
           <a class="btn btn-ghost" href="https://linkedin.com/in/amiraebrahim1" target="_blank" rel="noopener">LinkedIn ↗</a>
+          <a class="btn btn-ghost" href="https://github.com/AmiraEbrahim1" target="_blank" rel="noopener">GitHub ↗</a>
           <span class="toast" id="toast" role="status">Copied to clipboard ✓</span>
         </div>
         </div>
